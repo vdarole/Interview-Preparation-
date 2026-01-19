@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Interview Preparation — Job Search</title>
+
+  <style>
+    :root{
+      --bg:#f3f6fb;
+      --card:#ffffff;
+      --muted:#6b7280;
+      --accent:#0366d6;
+      --accent-2:#16a34a;
+      --shadow: 0 8px 30px rgba(17,24,39,0.08);
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color-scheme: light;
+    }
+
+    html,body{
+      height:100%;
+      margin:0;
+      background: linear-gradient(180deg, var(--bg), #e9f0fb 60%);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    .wrap{
+      max-width:1100px;
+      margin:48px auto;
+      padding:24px;
+    }
+
+    .card{
+      display:flex;
+      gap:32px;
+      background:var(--card);
+      border-radius:14px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      min-height:380px;
+    }
+
+    .panel-left{
+      flex:0 0 320px;
+      background: linear-gradient(135deg,#eef8ff 0%, #ffffff 100%);
+      padding:28px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:flex-start;
+      border-right:1px solid rgba(10,20,40,0.03);
+    }
+
+    .panel-left .logo{
+      width:110px;
+      height:110px;
+      border-radius:18px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: linear-gradient(135deg, rgba(3,102,214,0.12), rgba(22,163,74,0.08));
+      box-shadow: inset 0 -6px 20px rgba(3,102,214,0.03);
+      margin-bottom:18px;
+      color:var(--accent);
+      font-weight:700;
+      font-size:18px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .panel-left .logo img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      border-radius:18px;
+    }
+
+    .panel-left h2{
+      margin:0 0 8px;
+      font-size:20px;
+      color:var(--accent);
+      text-align:center;
+    }
+
+    .panel-left p{
+      margin:0;
+      color:var(--muted);
+      text-align:center;
+      font-size:14px;
+      line-height:1.4;
+      max-width:240px;
+    }
+
+    .panel-right{
+      flex:1;
+      padding:28px;
+      min-width:0;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .header-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:18px;
+    }
+
+    .header-row .title{
+      margin:0;
+      font-size:22px;
+      color:#0f1724;
+    }
+
+    .muted{
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .card-section{
+      background:#f8fbff;
+      border-radius:10px;
+      padding:16px;
+      border:1px solid rgba(10,20,40,0.03);
+      margin-bottom:18px;
+    }
+
+    .card-section h3{
+      margin:0 0 10px;
+      color:#065fd4;
+      font-size:16px;
+    }
+
+    .suggestions ul{
+      margin:0;
+      padding-left:18px;
+      color:var(--muted);
+    }
+
+    .example{
+      background:#fff;
+      border-radius:8px;
+      padding:12px;
+      border:1px solid #e6eefb;
+      margin-top:10px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
+      color:#0f1724;
+      white-space:pre-wrap;
+      font-size:13px;
+    }
+
+    .controls{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      align-items:center;
+      margin-top:12px;
+    }
+
+    input[type="file"]{
+      display:inline-block;
+      padding:10px 12px;
+      border-radius:8px;
+      border:1px solid #d6e6ff;
+      background:linear-gradient(180deg,#fff,#fbfeff);
+      font-size:14px;
+      color:#0f1724;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 16px;
+      border-radius:8px;
+      border:none;
+      cursor:pointer;
+      font-weight:600;
+    }
+
+    .btn-primary{
+      background:linear-gradient(180deg,var(--accent), #024ea4);
+      color:#fff;
+      box-shadow: 0 6px 18px rgba(3,102,214,0.12);
+    }
+
+    .btn-ghost{
+      background:transparent;
+      border:1px solid #e7eefc;
+      color:#0f1724;
+    }
+
+    .btn-success{
+      background:linear-gradient(180deg,var(--accent-2), #128c3d);
+      color:#fff;
+    }
+
+    .quiz-area{
+      margin-top:8px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .question{
+      font-weight:700;
+      color:#16325c;
+      font-size:16px;
+      min-height:48px;
+    }
+
+    .provided-answer{
+      display:none;
+      background:#fff;
+      padding:12px;
+      border-radius:8px;
+      border:1px solid #eef6ea;
+      color:#0b3a18;
+      font-size:14px;
+      white-space:pre-wrap;
+    }
+
+    textarea#answer{
+      width:100%;
+      min-height:140px;
+      resize:vertical;
+      padding:12px;
+      border-radius:8px;
+      border:1px solid #e3e9f8;
+      font-size:15px;
+      font-family:inherit;
+      color:#0f1724;
+      background:#fff;
+    }
+
+    .footer-actions{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      margin-top:6px;
+    }
+
+    .progress{
+      margin-left:auto;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .bottom-bar{
+      text-align:center;
+      margin-top:22px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .home-btn{
+      margin-top:16px;
+      padding:10px 20px;
+      border-radius:8px;
+      border:none;
+      background:transparent;
+      color:var(--accent);
+      cursor:pointer;
+      font-weight:600;
+    }
+
+    @media (max-width:880px){
+      .card{ flex-direction:column; }
+      .panel-left{ flex: none; width:100%; border-right:none; border-bottom:1px solid rgba(10,20,40,0.03); }
+      .panel-right{ padding:20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" role="region" aria-label="Interview Preparation">
+      <div class="panel-left" aria-hidden="false">
+        <div class="logo" aria-hidden="true">
+          <!-- image uses the exact path you provided -->
+          <img id="interviewerImage"
+               src="C:UsersAdminOneDriveDesktopInterview - QuestionsInterviewer.jpg"
+               alt="Interviewer asking question"
+               onerror="this.style.display='none'; document.getElementById('fallbackText').style.display='flex';"
+               onload="document.getElementById('fallbackText').style.display='none';">
+          <div id="fallbackText" style="display:flex; width:110px; height:110px; border-radius:18px; align-items:center; justify-content:center; color:var(--accent); font-weight:700; font-size:18px; background: linear-gradient(135deg, rgba(3,102,214,0.12), rgba(22,163,74,0.08));">
+            IP
+          </div>
+        </div>
+        <h2>Interview Prep</h2>
+        <p>Practice common interview questions, compare your answers with provided ones, and download your responses for review.</p>
+      </div>
+
+      <div class="panel-right">
+        <div class="header-row">
+          <div>
+            <h1 class="title">Practice Session</h1>
+            <div class="muted">Load a plain text file with Questions and Answers to begin</div>
+          </div>
+          <div class="muted" id="statusLabel">No file loaded</div>
+        </div>
+
+        <div class="card-section suggestions" aria-live="polite">
+          <h3>How to use</h3>
+          <ul>
+            <li>Prepare a .txt file. Each question can be stored as a "Question:" / "Answer:" pair, or place one question per line.</li>
+            <li>Click Load Questions, type your answer, and click Next.</li>
+            <li>Use Show Answer to reveal the expected answer and hear it read aloud.</li>
+            <li>Download your answers at the end for review.</li>
+          </ul>
+
+          <div class="example" aria-hidden="false">
+Question: What is your name ?
+Answer: My name is Vallabh
+
+Question: Tell me about yourself.
+Answer: I am a software developer with experience in ...
+          </div>
+        </div>
+
+        <div>
+          <div class="controls" role="group" aria-label="File and actions">
+            <input id="fileInput" type="file" accept=".txt" aria-label="Choose questions text file">
+            <button class="btn btn-primary" onclick="loadQuestions()" id="loadBtn">Load Questions</button>
+            <div style="flex:1"></div>
+            <div class="muted" id="fileInfo">Supported: .txt</div>
+          </div>
+
+          <div id="quizSection" style="display:none;" class="quiz-area" aria-live="polite">
+            <div class="question" id="question">Q1: —</div>
+
+            <div id="providedAnswer" class="provided-answer" role="status" aria-atomic="true"></div>
+
+            <label for="answer" class="muted">Your answer</label>
+            <textarea id="answer" placeholder="Type your answer here..." aria-label="Type your answer"></textarea>
+
+            <div class="footer-actions">
+              <button id="showAnswerBtn" class="btn btn-ghost" onclick="showProvidedAnswer()">Show Answer</button>
+              <button id="nextBtn" class="btn btn-primary" onclick="nextQuestion()">Next</button>
+              <button id="downloadBtn" class="btn btn-success" onclick="downloadAnswers()" style="display:none">Download Answers</button>
+              <div class="progress" id="progress">0 / 0</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="bottom-bar">
+      <button class="home-btn" onclick="window.location.href='index.html'">← Back to Home</button>
+      <div style="margin-top:8px;">&copy; 2023 Job Search Website. All rights reserved.</div>
+    </div>
+  </div>
+
+  <script>
+    let items = []; // { q: "...", a: "..." }
+    let current = 0;
+    const userAnswers = [];
+
+    function speakText(text) {
+      if (!text) return;
+      try {
+        window.speechSynthesis.cancel();
+        const speech = new SpeechSynthesisUtterance(text);
+        speech.lang = "en-US";
+        window.speechSynthesis.speak(speech);
+      } catch (e) {
+        console.warn("Speech API not available", e);
+      }
+    }
+
+    function parseQA(content) {
+      const blocks = content.split(/(?=^Question:)/im).map(b => b.trim()).filter(Boolean);
+      const parsed = [];
+
+      for (const b of blocks) {
+        const m = b.match(/^Question:\s*([\s\S]*?)\r?\nAnswer:\s*([\s\S]*)$/im);
+        if (m) {
+          parsed.push({ q: m[1].trim(), a: m[2].trim() });
+        } else {
+          const lines = b.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+          if (lines.length === 1) {
+            parsed.push({ q: lines[0].replace(/^Question:\s*/i, ''), a: '' });
+          } else if (lines.length > 1) {
+            const first = lines.shift();
+            parsed.push({ q: first.replace(/^Question:\s*/i, ''), a: lines.join("\n") });
+          }
+        }
+      }
+
+      if (parsed.length === 0) {
+        const lines = content.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+        for (const l of lines) parsed.push({ q: l, a: '' });
+      }
+
+      return parsed;
+    }
+
+    function loadQuestions() {
+      const fileInput = document.getElementById('fileInput');
+      const file = fileInput.files[0];
+      if (!file) {
+        alert("Please select a questions text file.");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const content = String(e.target.result || '');
+        items = parseQA(content);
+        if (items.length === 0) {
+          alert("No questions found in file.");
+          return;
+        }
+        current = 0;
+        userAnswers.length = 0;
+        document.getElementById('quizSection').style.display = 'flex';
+        document.getElementById('providedAnswer').style.display = 'none';
+        document.getElementById('showAnswerBtn').style.display = items[0].a ? 'inline-flex' : 'none';
+        document.getElementById('downloadBtn').style.display = 'none';
+        document.getElementById('fileInfo').textContent = file.name;
+        document.getElementById('statusLabel').textContent = `Loaded ${items.length} question(s)`;
+        updateProgress();
+        showQuestion();
+      };
+      reader.onerror = function() {
+        alert("Failed to read file.");
+      };
+      reader.readAsText(file);
+    }
+
+    function showQuestion() {
+      const qObj = items[current];
+      const questionText = `Q${current + 1}: ${qObj.q}`;
+      document.getElementById("question").textContent = questionText;
+      const provided = document.getElementById("providedAnswer");
+      provided.style.display = 'none';
+      provided.textContent = '';
+      document.getElementById("answer").value = "";
+      document.getElementById('showAnswerBtn').style.display = qObj.a ? 'inline-flex' : 'none';
+      updateProgress();
+      speakText(qObj.q);
+    }
+
+    function showProvidedAnswer() {
+      const qObj = items[current];
+      const ans = qObj.a || "(No provided answer)";
+      const providedDiv = document.getElementById('providedAnswer');
+      providedDiv.textContent = ans;
+      providedDiv.style.display = 'block';
+      speakText(ans);
+    }
+
+    function nextQuestion() {
+      const typed = document.getElementById("answer").value.trim();
+      userAnswers.push(typed);
+      current++;
+      if (current < items.length) {
+        showQuestion();
+      } else {
+        document.getElementById('question').textContent = "All questions answered!";
+        document.getElementById('answer').style.display = "none";
+        document.getElementById('showAnswerBtn').style.display = "none";
+        document.getElementById('nextBtn').style.display = "none";
+        document.getElementById('providedAnswer').style.display = "none";
+        document.getElementById('downloadBtn').style.display = "inline-flex";
+        document.getElementById('statusLabel').textContent = "Session complete";
+        updateProgress();
+        speakText("All questions answered. Thank you!");
+      }
+    }
+
+    function updateProgress() {
+      const progress = document.getElementById('progress');
+      progress.textContent = `${Math.min(current + 1, items.length)} / ${items.length}`;
+    }
+
+    function downloadAnswers() {
+      const lines = [];
+      for (let i = 0; i < items.length; i++) {
+        lines.push(`Q${i + 1}: ${items[i].q}`);
+        lines.push(`Provided Answer: ${items[i].a || ''}`);
+        lines.push(`User Answer: ${userAnswers[i] || ''}`);
+        lines.push('---');
+      }
+      const content = lines.join("\n");
+      const blob = new Blob([content], { type: "text/plain" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "interview-answers.txt";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+Question: How do you check the permissions of a file in Linux?
+Answer:
+Use ls -l filename to view file permissions, ownership, and type.
+
+Question: How do you find all files with SUID or SGID permissions?
+Answer:
+find / -perm /4000 -type f 2>/dev/null   # SUID  
+find / -perm /2000 -type f 2>/dev/null   # SGID
+
+Question: What is the purpose of SELinux and how do you check its status?
+Answer:
+SELinux enforces access control policies for security.
+Check status with:
+# sestatus
+or
+# getenforce
+
+Question: How do you create a new user and assign them sudo privileges?
+Answer:
+useradd -m username
+passwd username
+usermod -aG wheel username   # RHEL/CentOS
+usermod -aG sudo username    # Ubuntu/Debian
+
+Question: How do you secure SSH access to a Linux server?
+Answer:
+Disable root login in /etc/ssh/sshd_config → PermitRootLogin no
+Use key-based authentication
+Change the default SSH port
+Disable password login → PasswordAuthentication no
+Restart SSH: systemctl restart sshd
+
+Question: What is the difference between chroot and jail?
+Answer:
+chroot: Changes the apparent root directory for a process.
+jail (FreeBSD): A more advanced, isolated environment with process and network restrictions.

@@ -1,0 +1,85 @@
+Question: How do you check the system logs for errors?
+Answer: Use journalctl -xe or check /var/log/ files like /var/log/messages, /var/log/syslog, /var/log/secure for errors.
+
+Question: How do you troubleshoot a service that is failing to start?
+Answer: Check systemctl status <service>, view logs with journalctl -u <service> -xe, verify config files, fix issues, then restart the service.
+
+Question: How do you recover a system stuck in emergency mode?
+Answer: Check errors with journalctl -xb, fix fstab or filesystem issues using fsck, remount / as rw, then exit or reboot.
+
+Question: What is the purpose of the dmesg command?
+Answer: Displays kernel messages—useful for diagnosing hardware, driver, or boot issues.
+
+Question: How do you troubleshoot network connectivity issues in Linux?
+Answer: Check IP with ip a, test with ping, check routes ip route, DNS via nslookup, and firewall using iptables or firewall-cmd.
+
+Question: How to regenerate the initrd image using recuse
+Answer:
+# mkinitrd /boot/initramfs-3.10.0-957.el7.x86_64.img 3.10.0-957.el7.x86_64
+# dracut -f /boot/initramfs-3.10.0-957.el7.x86_64.img 3.10.0-957.el7.x86_64
+
+Question: How to Login via single user mode in RHEL 7 ?
+Answer: Boot the system , go to GRUB2 boot loader Screen, Press ‘e’ and go to the line which starts with ‘linux16/vmlinz‘ and replace ‘ro‘ with ‘rw init=/sysroot/bin/bash‘ and Press ctrl-x to boot.
+
+Question: System Utilization & Diagnostics
+Answer: Core tools for monitoring: 
+ top, vmstat, iostat, dmesg, lsof, fuser, pmap, ps, sar, strace, watch, stress.
+journalctl -xb              # Logs from last boot
+journalctl -k               # Kernel logs
+dmesg  -T| less             # Kernel ring buffer
+
+Question: Restore deleted LV:
+Answer: vgcfgrestore vg01 -f /etc/lvm/archive/ ; lvchange -a y /dev/vg01/lv01
+
+Question: What is a Kernel Panic in Linux?
+Answer: A kernel panic occurs when the Linux kernel encounters a fatal error that it cannot safely recover from, such as a hardware failure, driver bug, or invalid memory access. The system halts or reboots to prevent further damage.
+
+Question: What are common causes of a Kernel Panic?
+Answer:
+Faulty or incompatible kernel modules/drivers
+Corrupt initramfs or kernel image
+Hardware issues (RAM, disk, CPU)
+Filesystem corruption or missing system libraries
+Misconfigured boot parameters or SELinux policies
+
+Question: How do you troubleshoot a Kernel Panic?
+Answer:
+Boot into rescue or recovery mode.
+Check logs in /var/log/messages, /var/log/kern.log, or journalctl -xb.
+Verify recent kernel/module changes.
+Test memory with memtest86+.
+Check hardware connections and drivers.
+Reinstall or roll back to a stable kernel.
+
+Question: How can you prevent Kernel Panics?
+Answer: Keep kernel and drivers updated from trusted sources.
+Avoid manual module modification unless necessary.
+Regularly monitor hardware health (SMART, sensors).
+Maintain tested kernel backups and use GRUB to boot previous versions.
+
+Question: What is Filesystem Corruption?
+Answer: Filesystem corruption occurs when metadata or data structures that define file storage become inconsistent or damaged, leading to unreadable or lost data.
+
+Question: What causes Filesystem Corruption in Linux?
+Answer: Unexpected shutdowns or power failures
+Disk or controller hardware failure
+Kernel bugs or driver issues
+Overfilled disks or improper unmounting
+RAID/sync issues or bad sectors
+
+Question: How do you check and repair filesystem corruption?
+Answer: Boot into single-user or rescue mode.
+Unmount the affected partition.
+Run fsck /dev/sdXn to scan and repair errors.
+Review logs in /var/log/fsck/.
+Reboot and verify with mount and dmesg.
+
+Question: How can you prevent filesystem corruption?
+Answer: Use reliable hardware and UPS for power stability.
+Enable journaling filesystems (e.g., ext4, XFS).
+Schedule periodic fsck checks.
+Maintain proper disk usage (<90%).
+Ensure clean shutdowns and RAID sync.
+
+Question: How are kernel panic and filesystem corruption related?
+Answer: Filesystem corruption can cause kernel panics if critical files or drivers become unreadable at boot or runtime. Conversely, a kernel panic during write operations may leave filesystems in an inconsistent stat

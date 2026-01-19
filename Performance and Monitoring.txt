@@ -1,0 +1,31 @@
+Question: How do you check CPU and memory usage of a process?
+Answer:
+Use top, htop, or:
+ps -p <PID> -o %cpu,%mem,cmd
+
+Question: What is the difference between top and htop?
+Answer:
+top is a basic text-based monitor; htop is interactive, colorized, supports scrolling, and allows killing processes easily.
+
+Question: How do you monitor disk I/O in real time?
+Answer:
+Use:
+iostat -x 1
+or
+iotop
+to see per-process I/O activity.
+
+Question: What is the purpose of the vmstat command?
+Answer:
+vmstat reports system performance — CPU, memory, processes, I/O, and swap usage in real time.
+
+Question: How do you check the number of active connections to a server?
+Answer:
+Use:
+netstat -tun | grep ESTABLISHED | wc -l
+or
+ss -tna | grep ESTAB | wc -l
+
+Question: How do you identify memory leaks in a Linux system?
+Answer:
+Monitor memory usage with top, ps, or smem over time; use valgrind --leak-check=yes for applications; and check /proc/<PID>/smaps for growing memory usage.

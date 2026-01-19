@@ -1,0 +1,172 @@
+Question: What is Ansible?
+Answer:
+Ansible is an open-source automation tool used for configuration management, application deployment, and orchestration using YAML playbooks.
+
+Question: How does Ansible connect to remote systems?
+Answer:
+Ansible uses SSH (or WinRM for Windows) to connect to remote hosts — no agents are required.
+
+Question: What is an Ansible Playbook?
+Answer:
+A Playbook is a YAML file that defines tasks to be executed on target hosts in a structured, readable format.
+
+Question: What is an Ansible Inventory?
+Answer:
+An inventory is a file (usually /etc/ansible/hosts) listing managed nodes, grouped under sections for targeted execution.
+
+Question: What is an Ansible Module?
+Answer:
+Modules are reusable units of code that perform specific tasks like installing packages, copying files, or managing services.
+
+Question: What is the difference between a Role and a Playbook?
+Answer:
+A Role is a reusable, organized structure for Playbooks with predefined tasks, handlers, variables, and templates.
+
+Question: How do you run an Ansible Playbook?
+Answer:
+ansible-playbook playbook.yml -i inventory
+
+Question: How do you test connectivity to all hosts in an inventory?
+Answer:
+ansible all -m ping
+
+
+Question: How do you check Ansible version?
+Answer:
+ansible --version
+
+
+Question: How do you use variables in Ansible?
+Answer:
+Variables can be defined in Playbooks, inventory files, or external YAML files and referenced as {{ variable_name }}.
+
+Question: What is the purpose of Ansible Vault?
+Answer:
+Ansible Vault encrypts sensitive data like passwords and keys in YAML files. Example:
+ansible-vault encrypt secrets.yml
+
+Question: How do you run only specific tasks in a Playbook?
+Answer:
+Use tags:
+ansible-playbook playbook.yml --tags "install"
+
+
+Question: What are Handlers in Ansible?
+Answer:
+Handlers are special tasks triggered by a notify statement — commonly used to restart services after changes.
+
+Question: How do you check syntax of a Playbook?
+Answer:
+ansible-playbook playbook.yml --syntax-check
+
+Question: How do you limit execution to a specific host?
+Answer:
+ansible-playbook playbook.yml -l hostname
+
+Question: What are Ansible Facts?
+Answer:
+Facts are system properties (like IP, OS, memory) automatically gathered from hosts using the setup module.
+
+Question: How do you disable fact gathering in a Playbook?
+Answer:
+Set the following at the top of your Playbook:
+gather_facts: no
+
+Question: What are Conditionals in Ansible?
+Answer:
+Conditionals control task execution based on logic. Example:
+when: ansible_os_family == "RedHat"
+
+Question: How do you use Loops in Ansible?
+Answer:
+with_items:
+  - httpd
+  - nginx
+or newer syntax:
+loop:
+  - httpd
+  - nginx
+
+Question: What is a Dynamic Inventory?
+Answer:
+It’s an external script or plugin (like AWS, Azure, VMware) that generates inventory dynamically instead of static host files.
+
+Question: How do you handle errors in Ansible?
+Answer:
+Use:
+ignore_errors: yes
+or handle cleanly with:
+block:
+  - name: risky task
+    command: /bin/false
+rescue:
+  - debug: msg="Task failed, recovering..."
+
+Question: What is a Block in Ansible?
+Answer:
+Blocks group multiple tasks with shared attributes like when, become, or rescue.
+
+Question: What is the difference between include and import in Ansible?
+Answer:
+import_tasks / import_playbook: Static inclusion (processed during playbook parsing).
+include_tasks / include_playbook: Dynamic inclusion (evaluated during runtime).
+
+Question: How do you use Handlers with notify in Ansible?
+Answer:
+tasks:
+  - name: update config
+    copy:
+      src: conf
+      dest: /etc/myapp.conf
+    notify: restart myapp
+handlers:
+  - name: restart myapp
+    service:
+      name: myapp
+      state: restarted
+
+Question: What is Delegation in Ansible?
+Answer:
+Delegation allows executing a task on a different host:
+delegate_to: localhost
+
+
+Question: How do you run tasks in parallel in Ansible?
+Answer:
+Use the -f option:
+ansible-playbook playbook.yml -f 10
+or set serial in Playbook for controlled batches.
+
+Question: What is Ansible Galaxy?
+Answer:
+Ansible Galaxy is a public repository for sharing and downloading Ansible roles. Example:
+ansible-galaxy install geerlingguy.nginx
+
+
+Question: How do you use templates in Ansible?
+Answer:
+Templates use Jinja2 syntax to create dynamic files. Example:
+- template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+
+
+Question: What is the purpose of register in Ansible?
+Answer:
+It stores the result of a task in a variable for later use. Example:
+- command: uptime
+  register: result
+- debug:
+    msg: "{{ result.stdout }}"
+
+Question: How do you limit Ansible task execution to specific tags?
+Answer:
+ansible-playbook playbook.yml --tags "install"
+To skip:
+ansible-playbook playbook.yml --skip-tags "cleanup"
+
+
+Question: How do you encrypt only specific variables in a Playbook?
+Answer:
+Use Ansible Vault inline encryption:
+ansible-vault encrypt_string 'password123' --name 'db_pass'

@@ -1,0 +1,214 @@
+Question: Can you give us a quick overview of your professional journey?
+Answer: Hi, my name is Vallabh. I have 19 years of IT experience, out of which 15 years are in Linux administration. Over the years, I’ve worked across multiple organizations, and for the past 4 years, I’ve been with Hexaware Technologies Ltd as a Technical Specialist.
+I manage a team of 8 Linux L2 engineers, and we are responsible for handling 1000+ Linux servers. My primary responsibilities include analyzing and resolving critical Linux issues, guiding L1 and L2 teams, and reporting project status to management — including monthly incidents, change requests, and OS patching updates.
+I also take care of vendor coordination, root cause analysis, performance tuning, and documentation to ensure long-term stability. I enjoy mentoring my team, enabling them to solve complex issues, and driving process improvements.
+Currently, I am working on a major migration project, where our servers are being moved from VMware vCenter to Azure VMware Solution, while also upgrading SUSE Linux from 15 SP3 to 15 SP6 and RHEL from version 7 to 8.
+Some of the key projects I have implemented include:
+Implementing Red Hat Satellite 6.16 for patch management on RHEL servers.
+Using SUSE Manager for SUSE server patching and upgrading it from version 4.3 to 5.
+That’s a brief introduction about me.
+
+Question: Can you describe your current project — the migration to Azure VMware Solution — in detail?
+Answer: Yes. We’re migrating approximately 1,000 virtual Linux servers from an on-premises VMware vCenter environment to Azure VMware Solution (AVS).
+The goal is to modernize infrastructure, improve scalability, and reduce datacenter dependency.
+During this migration, we’re also upgrading SUSE Linux from 15 SP3 to SP6 and RHEL from 7 to 8 to ensure long-term vendor support.
+I’m responsible for:
+Planning migration waves, validating templates, and ensuring post-migration validation.
+Coordinating with Azure and VMware teams.
+Verifying application and OS compatibility.
+Managing rollback and risk mitigation plans.
+
+Question: What challenges have you faced during the Linux OS upgrade from RHEL 7 to 8 and how did you handle them?
+Answer: One key challenge was package and repository compatibility — many legacy applications had dependencies on Python 2, which was deprecated in RHEL 8.
+We handled it by containerizing certain workloads and rebuilding application dependencies.
+Another challenge was ensuring network and disk UUID consistency post-upgrade. We validated UUIDs, fstab entries, and SELinux configurations using pre/post scripts.
+Automation using Ansible playbooks helped streamline prechecks and post-validation steps.
+
+Question: How did you implement Red Hat Satellite 6.16 for patch management?
+Answer: We deployed Red Hat Satellite 6.16 to centralize patch management and content lifecycle.
+Steps included:
+Installing Satellite on a dedicated RHEL server.
+Registering clients via subscription-manager.
+Syncing repositories from Red Hat CDN.
+Creating content views, activation keys, and lifecycle environments (Dev, QA, Prod).
+Scheduling monthly patch windows through Satellite.
+This eliminated manual patching and improved compliance reporting.
+
+Question: What are your responsibilities as a Technical Specialist managing an 8-member team?
+Answer: My role includes:
+Technical escalation: Handling P1/P2 issues and guiding L1/L2 engineers.
+Process improvement: Implementing automation (Ansible, shell scripts) to reduce manual work.
+Reporting: Preparing weekly/monthly incident and change reports for management.
+Mentoring: Conducting knowledge-sharing sessions and performance reviews.
+Coordination: Acting as the bridge between operations, vendors, and management.
+This balance of technical and leadership tasks helps ensure service stability and team growth.
+
+Question: How do you ensure system performance and stability across 1,000+ Linux servers?
+Answer: I focus on proactive monitoring and standardization:
+Using Prometheus + Grafana for real-time performance metrics.
+Standardizing OS baselines, kernel parameters, and security policies.
+Scheduling tuning (e.g., sysctl parameters, swappiness, I/O scheduler optimization).
+Implementing regular health checks via Ansible automation.
+We also track KPIs like CPU load, memory utilization, and patch compliance rates.
+
+Question: Can you share an example of a critical Linux issue you resolved recently?
+Answer: Yes, we had a kernel panic issue on multiple RHEL 8 VMs after a recent patch cycle.
+Root cause analysis revealed a conflict between the ixgbe driver and the updated kernel.
+We booted into the previous kernel, verified stability, and applied an updated driver package after validation.
+To prevent recurrence, we now maintain a staging environment where patches are tested on a subset of systems before production rollout.
+
+Question: How do you handle RCA and ensure long-term prevention of recurring issues?
+Answer: RCA is part of my core responsibility. I follow a structured approach:
+Collect logs (journalctl, dmesg, /var/log/messages).
+Reproduce the issue in a controlled environment.
+Identify the root cause (hardware, kernel, or application).
+Document findings in our internal knowledge base.
+Implement preventive measures — patches, config hardening, or automation scripts.
+We also review RCAs monthly to identify patterns and improve processes.
+
+Question: How do you manage patching in a mixed environment (RHEL and SUSE)?
+Answer: For RHEL, we use Red Hat Satellite, and for SUSE, SUSE Manager.
+Both tools integrate with our CMDB and provide compliance dashboards.
+Patching is done in defined maintenance windows with:
+Prechecks (CPU, disk space, network).
+Snapshot or backup verification.
+Controlled deployment using staging > production approach.
+This ensures consistency and minimizes downtime.
+
+Question: How do you motivate and mentor your team?
+Answer: I encourage ownership and knowledge sharing.
+I assign engineers to lead certain initiatives (like automation, patching, or RCA), which builds confidence.
+We conduct weekly review sessions to discuss challenges and solutions.
+Recognizing individual achievements and providing constructive feedback helps maintain morale and continuous learning.
+
+Question: What tools and automation frameworks do you regularly use?
+Answer: Ansible – for patching, configuration drift detection, and compliance checks.
+Shell scripting – for log analysis, performance checks, and backups.
+Red Hat Satellite / SUSE Manager – patch management.
+Prometheus + Grafana – performance monitoring.
+Jenkins + Git – for CI/CD integration in certain infra automation pipelines.
+
+Question: What do you enjoy most about your current role?
+Answer: I enjoy problem-solving and mentoring — guiding engineers to resolve complex issues independently and seeing their growth.
+I also like working on modernization projects, especially migrations and upgrades that enhance stability and performance.
+
+Question: What are your future goals?
+Answer: My short-term goal is to deepen my expertise in cloud-native infrastructure — especially automation on Azure and hybrid environments.
+Long term, I aim to move into an Architect / Infrastructure Lead role focusing on cloud strategy and platform modernization.
+
+Question: What are the key differences between RHEL 7 and RHEL 8 that affected your migration process?
+Answer: System Initialization: RHEL 8 fully adopts systemd; legacy init scripts are deprecated.
+YUM → DNF: RHEL 8 uses dnf, offering better dependency resolution.
+Python: Python 2 is removed; Python 3 is the default.
+Networking: network-scripts are deprecated — NetworkManager is the default.
+Repositories: Introduction of AppStream and BaseOS repos for modular content delivery.
+Security: OpenSSL 1.1, newer crypto policies, and SELinux improvements.
+We resolved migration issues by validating packages via leapp preupgrade reports and remediating Python dependency conflicts.
+
+Question: How do you troubleshoot a system that’s stuck in emergency mode after boot?
+Answer: Check the error: Usually visible on the console (e.g., fstab, disk, or SELinux errors).
+Mount root FS in read-write mode:
+mount -o remount,rw /
+Check /etc/fstab for incorrect UUIDs or non-existent mounts.
+Use journalctl -xb for detailed boot logs.
+Rebuild initramfs if necessary:
+dracut -f
+If kernel corruption is suspected, boot into an older kernel from GRUB and reinstall the faulty one.
+
+Question: Explain your approach to performing RCA for a kernel panic incident.
+Answer: Capture logs: Review /var/log/messages, journalctl -k, and vmcore (if kdump enabled).
+Analyze core dump:
+crash /usr/lib/debug/lib/modules/$(uname -r)/vmlinux /var/crash/vmcore
+Identify the trigger (driver, memory corruption, or I/O).
+Cross-check kernel version and recently applied patches.
+Isolate the issue — e.g., faulty NIC driver (ixgbe), outdated firmware, etc.
+Apply the fix — such as updating driver/kernel or blacklisting a module — and document RCA with preventive steps (e.g., pre-patch validation).
+
+Question: How do you handle filesystem corruption in Linux production servers?
+Answer: First, remount the filesystem as read-only to prevent data loss:
+mount -o remount,ro /mountpoint
+Run filesystem checks using:
+fsck -y /dev/sdX
+If it’s XFS:
+xfs_repair /dev/sdX
+Validate inode and journal integrity.
+After repair, perform mount -a and check disk health using smartctl.
+RCA focuses on I/O errors, sudden reboots, or storage path issues (e.g., multipath flaps).
+
+Question: What’s your patch management strategy across mixed RHEL and SUSE environments?
+Answer: RHEL: Managed via Red Hat Satellite 6.16 using lifecycle environments and activation keys.
+SUSE: Managed via SUSE Manager 5 integrated with SLES repositories.
+Monthly patching windows are automated through Ansible playbooks and orchestrated maintenance schedules.
+Pre-checks include disk space, kernel version, and snapshot confirmation.
+Post-validation ensures service availability and patch compliance reports are generated automatically.
+
+Question: How do you perform performance tuning on Linux servers?
+Answer: CPU: Monitor mpstat, pidstat, and top for load distribution.
+Memory: Use free -m, vmstat, and tune vm.swappiness as needed.
+Disk I/O: Analyze with iostat, iotop, and tune I/O scheduler (noop, deadline, mq-deadline).
+Network: Optimize rmem, wmem, and check dropped packets via sar -n DEV.
+Persistent tuning done in /etc/sysctl.conf.
+I’ve also automated health and performance checks using Ansible for 1000+ servers.
+
+Question: How do you ensure server security compliance?
+Answer : CIS Benchmark / STIG alignment using oscap and custom Ansible playbooks.
+Regular vulnerability scanning via Qualys and remediation through Satellite/SUSE Manager.
+Password policy enforcement via PAM and /etc/login.defs.
+Auditd and rsyslog for tracking privileged commands.
+Controlled sudo access and SSH hardening (PermitRootLogin=no, key-based auth only).
+Monthly compliance reports shared with InfoSec and Management.
+
+Question: What’s your approach to automating daily Linux operations?
+Answer: Automation is essential at this scale.
+I use:
+Ansible for patching, configuration drift, and compliance.
+Shell scripts for log rotation, performance data collection, and backup tasks.
+Integration with Jenkins pipelines for automation runs.
+Git for version control of playbooks.
+Automation reduced manual efforts by ~40% and improved patch success rate.
+
+Question: What are your go-to commands for diagnosing a high CPU utilization issue?
+Answer: top / htop – identify offending processes.
+pidstat -u 2 5 – per-process CPU usage.
+ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%cpu | head – snapshot.
+perf top or strace -p <pid> – identify kernel-level causes.
+Check system interrupts with cat /proc/interrupts to identify hardware/NIC driver issues.
+Finally, correlate findings with application logs to distinguish between app vs system-level CPU spikes.
+
+Question: How do you troubleshoot slow I/O or disk latency issues?
+Answer: Start with:
+iostat -x 1 5
+to check utilization and await times.
+Check multipath:
+multipath -ll
+Validate filesystem type and mount options.
+Use blktrace and fio for detailed testing.
+If SAN, coordinate with storage team to validate LUN performance.
+Tune kernel parameters for I/O scheduling if consistent bottlenecks are found.
+
+Question: What monitoring tools and metrics do you rely on?
+Answer: Prometheus + Grafana: System performance (CPU, memory, disk, network).
+Nagios: Service uptime and alerts.
+Elastic Stack (ELK): Centralized log analysis.
+Custom Ansible reports for kernel versions, patch levels, and resource usage.
+Key metrics tracked: load average, disk latency, memory utilization, patch compliance %, and incident recurrence rate.
+
+Question: How do you handle vendor coordination for critical issues?
+Answer: For kernel, hardware, or OS-level bugs, I collect:
+System report (sosreport / supportconfig).
+Crash dump (vmcore or kdump).
+SAR data for performance-related cases.
+Then I open a ticket with Red Hat or SUSE support, share diagnostics, and track fix implementation.
+Post-resolution, I conduct a knowledge-sharing session with the team and document the fix in our internal KB.
+
+Question: Can you describe your role in mentoring and managing L2 engineers?
+Answer: I conduct:
+Weekly technical sessions and RCA reviews.
+Assign ownership of tasks like patching, automation, and monitoring.
+Build team capability by involving engineers in P1 incident analysis.
+Maintain escalation matrices and track performance metrics.
+This approach ensures the team becomes self-reliant and confident in managing complex production issues.
+
+Question:. What’s your next focus area as a Linux SME?
+Answer: I’m currently focusing on hybrid infrastructure modernization — strengthening automation via Ansible and integrating Linux operations with Azure cloud-native monitoring and CI/CD pipelines.
+I’m also pursuing deeper knowledge in system reliability engineering (SRE) and containerization (Podman, Kubernetes on RHEL/SUSE) to stay aligned with evolving enterprise standards.

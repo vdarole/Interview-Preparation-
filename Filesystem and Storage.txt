@@ -1,0 +1,65 @@
+Question: How do you check disk usage for a specific directory?
+Answer: Use `du -sh /path/to/directory` to show total size, or `du -h --max-depth=1 /path` for subdirectory details.
+
+Question: How do you create and mount a new filesystem in Linux?
+Answer:
+mkfs.ext4 /dev/sdX1
+mkdir /mnt/data
+mount /dev/sdX1 /mnt/data
+To make it permanent, add an entry in `/etc/fstab`.
+
+Question: What is the difference between ext4 and xfs filesystems?
+Answer:
+* ext4: Default, general-purpose, supports smaller filesystems.
+* xfs: High-performance, better for large files and parallel I/O.
+
+Question: How do you check the inode usage of a filesystem?
+Answer: Use `df -i` to view inode usage and free inodes for each mounted filesystem.
+
+Question: How do you expand a logical volume in LVM?
+Answer:
+lvextend -L +10G /dev/vgname/lvname
+resize2fs /dev/vgname/lvname   # for ext4
+xfs_growfs /mountpoint         # for xfs
+
+Question: What is the purpose of fsck and when should you use it?
+Answer: `fsck` checks and repairs filesystem errors; use it when a disk shows corruption or fails to mount. Run it on unmounted or read-only filesystems.
+
+Question: How do you find large files in a directory?
+Answer:
+find /path -type f -size +500M -exec ls -lh {} \;
+or
+du -ah /path | sort -rh | head -n 10
+
+
+Question: How To scan newly assigned LUNS on Linux box without rebooting ?
+Answer: There are two ways to scan newly assigned LUNS :
+Method:1 if sg3 rpm is installed , then run the command ‘rescan-scsi-bus.sh’
+Method:2 Run the Command ,  
+echo "1" > /sys/class/fc_host/host$i/issue_lip  
+echo "- - -" > /sys/class/scsi_host/host$i/scan
+echo 1 > /sys/block/sdX/device/delete
+
+Question: How  to find WWN numbers of HBA cards in Linux Server ?
+Answer: We can find the WWN numbers of HBA cards using the command ‘systool -c fc_host -v | grep port_name’
+
+Question: /mount point usage is 99%, however did not find any file to delete, how did you clear up the / usage and bring back to normal usage?
+Answer: When lot of processes are running in Linux server there are lot of .TMP files which be created in background for support. You cannot identify use of / file system in this case using lsof would help.
+#### To check delete Temp files
+# lsof | grep deleted
+### Clear Temp Files by killing PID’s
+# lsof | grep deleted | grep “.TMP” | awk ‘{print $2 }’ | xargs kill -9
+### To delete Temp Files.
+lsof | grep deleted | grep “.TMP” | awk ‘{print $9 }’ | xargs rm -f
+
+Question: What is the purpose of /etc/fstab?
+Answer:
+/etc/fstab defines filesystems and their mount points so they mount automatically at boot.
+
+
+Question: What is Sticky-Bit Permission and how to give Sticky-Bit Permissions
+Answer: Purpose: Inside a world-writable directory, only the file owner (or root) may delete/rename their files (e.g., /tmp).
+Permission String Example: drwxrwxrwt (note the trailing t).
+Commands:
+chmod +t /dir    # Set sticky bit
+chmod -t /dir    # Remove sticky bit

@@ -1,0 +1,44 @@
+Question: How do you check open ports and their associated processes on a Linux system?
+Answer:
+Use:
+netstat -tulnp
+or
+ss -tulnp
+to list open ports with process names and PIDs.
+
+Question: What is the difference between iptables and firewalld?
+Answer:
+iptables: Uses static rule-based configuration.
+firewalld: Dynamic firewall that manages zones and uses iptables/nftables underneath.
+
+Question: How do you configure a static IP address in Linux?
+Answer:
+RHEL/CentOS: Edit /etc/sysconfig/network-scripts/ifcfg-eth0
+Ubuntu: Edit /etc/netplan/*.yaml and apply with netplan apply
+Or use:
+nmcli con mod eth0 ipv4.addresses 192.168.1.10/24 ipv4.gateway 192.168.1.1 ipv4.method manual
+nmcli con up eth0
+
+Question: How do you check the routing table in Linux?
+Answer:
+Use:
+ip route show
+or
+route -n
+
+Question: What is the purpose of the tcpdump command?
+Answer:
+tcpdump captures and analyzes network packets for troubleshooting and traffic inspection. Example:
+tcpdump -i eth0 host 192.168.1.5
+
+
+Question: How do you test DNS resolution using the dig and nslookup commands?
+Answer:
+dig example.com
+nslookup example.com
+Both show the resolved IP address and DNS server used.
+
+Question: How do you restart the network service in Linux?
+Answer:
+RHEL/CentOS: systemctl restart network or nmcli networking off && nmcli networking on
+Ubuntu: systemctl restart NetworkManager or netplan apply

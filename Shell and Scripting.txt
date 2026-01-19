@@ -1,0 +1,30 @@
+Question: How do you find and replace text in multiple files using a single command?
+Answer:
+grep -rl 'old_text' /path | xargs sed -i 's/old_text/new_text/g'
+Finds and replaces text in all matching files.
+
+Question: How do you count the number of lines in a file?
+Answer:
+wc -l filename
+
+Question: What is the difference between $@ and $* in shell scripting?
+Answer:
+$@ → Treats each argument as a separate word (preferred in loops).
+$* → Treats all arguments as a single string.
+
+Question: How do you schedule a cron job to run every 5 minutes?
+Answer:
+Run crontab -e and add:
+*/5 * * * * /path/to/script.sh
+
+Question: How do you pass arguments to a shell script?
+Answer:
+Run the script with arguments:
+./script.sh arg1 arg2
+Access inside script as $1, $2, etc.
+
+Question: How do you debug a shell script?
+Answer:
+Run:
+bash -x script.sh
+or add set -x in the script for step-by-step tracing.

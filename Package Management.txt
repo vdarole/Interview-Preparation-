@@ -1,0 +1,24 @@
+Question: How do you list all installed packages in a Linux system?
+Answer: 
+RHEL/CentOS/Rocky: rpm -qa or yum list installed
+Ubuntu/Debian: dpkg -l or apt list --installed
+
+Question: How do you find which package provides a specific file or command?
+Answer: 
+RHEL/CentOS: yum whatprovides /path/to/file or dnf provides /path/to/file
+Ubuntu/Debian: dpkg -S /path/to/file or apt-file search /path/to/file
+
+Question: What is the difference between yum and dnf?
+Answer:dnf is the modern replacement for yum — it’s faster, handles dependencies better, supports parallel downloads, and uses a more efficient API.
+
+Question: How do you install a package from a .rpm or .deb file?
+Answer:
+.rpm: sudo rpm -ivh package.rpm or sudo dnf install package.rpm
+.deb: sudo dpkg -i package.deb then fix deps with sudo apt -f install
+
+Question: How do you update the kernel in Linux?
+Answer:
+RHEL/CentOS: sudo yum update kernel or sudo dnf update kernel
+Ubuntu/Debian: sudo apt update && sudo apt upgrade
+Then reboot using:
+sudo reboot

@@ -1,0 +1,42 @@
+Question: How do you check the current runlevel of a Linux system?
+Answer:
+Use: 
+runlevel
+or check systemd target with:
+systemctl get-default
+
+Question: How do you change the hostname of a Linux system temporarily and permanently?
+Answer:
+Temporary:
+hostname newname
+Permanent (systemd):
+hostnamectl set-hostname newname
+
+Question: What is the difference between systemctl and service commands?
+Answer:
+systemctl: Used on systemd-based systems; manages units, services, and targets.
+service: Legacy command for SysVinit; used to start/stop traditional init scripts.
+
+Question: How do you schedule a one-time task using at command?
+Answer:
+echo "/path/to/script.sh" | at 10:30
+Lists scheduled jobs with atq and removes one with atrm <job_id>.
+
+Question: How do you display the last 50 lines of a log file in real time?
+Answer:
+tail -n 50 -f /var/log/messages
+
+Question: What is the purpose of strace and how do you use it?
+Answer:
+strace traces system calls and signals used by a process — useful for debugging. Example:
+strace -p <PID>
+or
+strace ./program
+
+Question: Explain the RHEL 8 Boot Process
+Answer: MBR → GRUB (loads Kernel image → extracts initramfs) → Kernel (loads drivers from initrd → launches systemd) → SYSTEMD (reads /etc/systemd configs → follows /etc/systemd/system/default.target → reaches required target state).
+
+Question: Explain Boot-Time Diagnostics
+Answer: Analyze boot performance:
+systemd-analyze → overall boot time.
+systemd-analyze blame → per-unit timing.
