@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>AI Mock Interview</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+
+<style>
+body{margin:0;background:#f3f6fb;font-family:Inter,system-ui}
+.wrap{max-width:1200px;margin:40px auto;padding:20px}
+.card{display:flex;gap:30px;background:#fff;border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,.08)}
+.panel-left{width:320px;padding:24px;background:#eef6ff}
+.panel-right{flex:1;padding:24px}
+.btn{padding:10px 16px;border-radius:8px;border:none;font-weight:600;cursor:pointer}
+.btn-primary{background:#0366d6;color:#fff}
+.btn-success{background:#16a34a;color:#fff}
+.btn-mic{background:#ef4444;color:#fff}
+.btn-mic.recording{background:#16a34a}
+textarea{width:100%;min-height:120px;padding:12px;border-radius:8px;border:1px solid #ddd}
+video{width:180px;border-radius:12px;display:none}
+.question{font-weight:700;font-size:16px}
+.card-section{background:#f8fbff;padding:14px;border-radius:10px;margin-top:12px}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+<div class="card">
+
+<!-- LEFT -->
+<div class="panel-left">
+<h2>🎤 Interviewer</h2>
+<p>Answer confidently as if facing a real interviewer.</p>
+<div style="font-size:80px;text-align:center">🧑‍💼</div>
+</div>
+
+<!-- RIGHT -->
+<div class="panel-right">
+<h2>AI Mock Interview</h2>
+
+<input type="file" id="fileInput" accept=".txt"/>
+<button class="btn btn-primary" onclick="loadQuestions()">Load Questions</button>
+<button class="btn" onclick="toggleWebcam()">🎥 Webcam</button>
+
+<video id="webcam" autoplay muted></video>
+
+<div id="quiz" style="display:none">
+<div class="question" id="question"></div>
+
+<textarea id="answer" placeholder="Answer here..."></textarea>
+
+<div>
+<button id="micBtn" class="btn btn-mic" onclick="toggleRecording()">🎤 Speak</button>
+<button class="btn btn-primary" onclick="nextQuestion()">Next</button>
+</div>
+
+<div id="scoreBox" class="card-section" style="display:none"></div>
+
+<button id="pdfBtn" class="btn btn-success" style="display:none" onclick="generatePDF()">
+📄 Download Interview Report
+</button>
+</div>
+
+</div>
+</div>
+
+<script>
+let items=[],current=0,userAnswers=[],scores=[],metrics=[];
+let recognition,isRecording=false,startTime=0,pauseCount=0;
+
+// ---------- LOAD QUESTIONS ----------
+function loadQuestions(){
+const f=document.getElementById("fileInput").files[0];
+if(!f) return alert("Select file");
+const r=new FileReader();
+r.onload=e=>{
+items=e.target.result.split(/\n+/).filter(Boolean).map(q=>({q,a:""}));
+document.getElementById("quiz").style.display="block";
+showQuestion();
+};
+r.readAsText(f);
+}
+
+// ---------- SHOW QUESTION ----------
+function showQuestion(){
+document.getElementById("question").textContent=`Q${current+1}: ${items[current].q}`;
+document.getElementById("answer").value="";
+document.getElementById("scoreBox").style.display="none";
+}
+
+// ---------- AI SCORING ----------
+function scoreAnswer(q,a){
+let wc=a.split(/\s+/).length;
+let score=Math.min(wc*2,40);
+let keywords=q.toLowerCase().split(/\W+/);
+keywords.forEach(k=>{if(k.length>4 && a.toLowerCase().includes(k)) score+=5});
+score=Math.min(score,100);
+let fb=score>80?"Excellent":score>60?"Good":score>40?"Average":"Weak";
+return {score,fb};
+}
+
+// ---------- NEXT ----------
+function nextQuestion(){
+let ans=document.getElementById("answer").value;
+userAnswers.push(ans);
+
+let s=scoreAnswer(items[current].q,ans);
+scores.push(s);
+
+metrics.push(calcSpeechMetrics());
+
+document.getElementById("scoreBox").style.display="block";
+document.getElementById("scoreBox").innerHTML=
+`<b>Score:</b> ${s.score}/100<br><b>Feedback:</b> ${s.fb}`;
+
+current++;
+if(current<items.length) showQuestion();
+else finish();
+}
+
+// ---------- FINISH ----------
+function finish(){
+document.getElementById("question").textContent="Interview Completed 🎉";
+document.getElementById("pdfBtn").style.display="inline-block";
+}
+
+// ---------- SPEECH ----------
+function initSpeech(){
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+if(!SR) return;
+recognition=new SR();
+recognition.continuous=true;
+recognition.onresult=e=>{
+for(let i=e.resultIndex;i<e.results.length;i++){
+document.getElementById("answer").value+=e.results[i][0].transcript+" ";
+pauseCount++;
+}};
+}
+initSpeech();
+
+function toggleRecording(){
+if(!recognition) return;
+if(!isRecording){
+recognition.start();startTime=Date.now();pauseCount=0;
+document.getElementById("micBtn").classList.add("recording");
+isRecording=true;
+}else{
+recognition.stop();isRecording=false;
+document.getElementById("micBtn").classList.remove("recording");
+}
+}
+
+function calcSpeechMetrics(){
+let mins=(Date.now()-startTime)/60000;
+let words=document.getElementById("answer").value.split(/\s+/).length;
+return {wpm:Math.round(words/mins)||0,pauses:pauseCount};
+}
+
+// ---------- WEBCAM ----------
+let cam=null;
+function toggleWebcam(){
+const v=document.getElementById("webcam");
+if(cam){cam.getTracks().forEach(t=>t.stop());cam=null;v.style.display="none";return;}
+navigator.mediaDevices.getUserMedia({video:true}).then(s=>{
+cam=s;v.srcObject=s;v.style.display="block";
+});
+}
+
+// ---------- PDF ----------
+function generatePDF(){
+const {jsPDF}=window.jspdf;
+const pdf=new jsPDF();
+let y=10;
+pdf.text("AI Mock Interview Report",10,y);y+=10;
+items.forEach((q,i)=>{
+pdf.text(`Q${i+1}: ${q.q}`,10,y);y+=6;
+pdf.text(`Answer: ${userAnswers[i]}`,10,y);y+=6;
+pdf.text(`Score: ${scores[i].score}/100`,10,y);y+=6;
+pdf.text(`WPM: ${metrics[i].wpm}, Pauses: ${metrics[i].pauses}`,10,y);
+y+=10;
+if(y>270){pdf.addPage();y=10;}
+});
+pdf.save("Interview_Report.pdf");
+}
+</script>
+</body>
+</html>
